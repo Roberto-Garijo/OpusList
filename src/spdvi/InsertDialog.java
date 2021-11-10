@@ -20,6 +20,9 @@ import javax.swing.JFileChooser;
 public class InsertDialog extends javax.swing.JDialog {
     
     private final OpusListMainForm mainForm = (OpusListMainForm) this.getParent();
+    public String userFolder = System.getProperty("user.home");
+    public String ubiData = "\\AppData\\Local\\OpusList\\data\\";
+    public String imageSource = "\\AppData\\Local\\OpusList\\images\\";
     
     
     public InsertDialog(java.awt.Frame parent, boolean modal) {
@@ -166,11 +169,20 @@ public class InsertDialog extends javax.swing.JDialog {
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         DefaultListModel<Opus> opusListModel = new DefaultListModel<Opus>();
-        if (mainForm.imagePath.equals("src/images/default.jpg")) {
+        if (mainForm.imagePath.equals(userFolder + imageSource + "default.jpg")) {
             mainForm.imageName = "default.jpg";
         }
         Opus obra = new Opus(txtId.getText(), txtTitle.getText(),txtYear.getText(), txtFormat.getText(), txtAuthor.getText(), mainForm.imageName);
         mainForm.obras.add(obra);
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File(mainForm.imagePath));
+            String outputImageAbsolutePath = userFolder + imageSource + txtId.getText() + ".jpg";
+            File outputImage = new File(outputImageAbsolutePath);
+
+            ImageIO.write(bufferedImage, "jpg", outputImage);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
         
         for (Opus o: mainForm.obras) {
             opusListModel.addElement(o);
@@ -190,7 +202,7 @@ public class InsertDialog extends javax.swing.JDialog {
             mainForm.imagePath = mainForm.fileChooser.getSelectedFile().getAbsolutePath();
             mainForm.imageName = mainForm.fileChooser.getSelectedFile().getName();
         } else {
-            mainForm.imagePath = "src/images/default.jpg";
+            mainForm.imagePath = userFolder + imageSource + "default.jpg";
         }
         try {
             BufferedImage selectedImage = ImageIO.read(new File(mainForm.imagePath));

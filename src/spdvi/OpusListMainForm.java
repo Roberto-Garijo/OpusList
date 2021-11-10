@@ -44,6 +44,7 @@ public class OpusListMainForm extends javax.swing.JFrame {
     public String registre;
     public String userFolder = System.getProperty("user.home");
     public String ubiData = "\\AppData\\Local\\OpusList\\data\\";
+    public String imageSource = "\\AppData\\Local\\OpusList\\images\\";
     public DefaultListModel<Opus> opusListModel;
 
     
@@ -261,7 +262,7 @@ public class OpusListMainForm extends javax.swing.JFrame {
                     try {
                         BufferedImage selectedImage;
                         if (o.getImatge() != null) {
-                            selectedImage = ImageIO.read(new File("src/images/" + o.getImatge()));
+                            selectedImage = ImageIO.read(new File(userFolder + imageSource + o.getImatge()));
                             lblImage.setIcon(resizImageIcon(selectedImage));
                         }
                     } catch (IOException ioe) {
