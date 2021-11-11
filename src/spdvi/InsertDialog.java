@@ -23,6 +23,7 @@ public class InsertDialog extends javax.swing.JDialog {
     public String userFolder = System.getProperty("user.home");
     public String ubiData = "\\AppData\\Local\\OpusList\\data\\";
     public String imageSource = "\\AppData\\Local\\OpusList\\images\\";
+    boolean selectImage = false;
     
     
     public InsertDialog(java.awt.Frame parent, boolean modal) {
@@ -168,10 +169,15 @@ public class InsertDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtAuthorActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-        DefaultListModel<Opus> opusListModel = new DefaultListModel<Opus>();
-        if (mainForm.imagePath.equals(userFolder + imageSource + "default.jpg")) {
+        try {
+            mainForm.imagePath = mainForm.fileChooser.getSelectedFile().getAbsolutePath();
+            mainForm.imageName = mainForm.fileChooser.getSelectedFile().getName();
+        } catch (NullPointerException npe) {
+            mainForm.imagePath = userFolder +  imageSource + "default.jpg";
             mainForm.imageName = "default.jpg";
         }
+        
+        DefaultListModel<Opus> opusListModel = new DefaultListModel<Opus>();
         Opus obra = new Opus(txtId.getText(), txtTitle.getText(),txtYear.getText(), txtFormat.getText(), txtAuthor.getText(), mainForm.imageName);
         mainForm.obras.add(obra);
         try {
@@ -198,12 +204,14 @@ public class InsertDialog extends javax.swing.JDialog {
         mainForm.fileChooser = new JFileChooser();
  
         int returnOption = mainForm.fileChooser.showOpenDialog(this);
-        if (returnOption == JFileChooser.APPROVE_OPTION) {
+        try {
             mainForm.imagePath = mainForm.fileChooser.getSelectedFile().getAbsolutePath();
             mainForm.imageName = mainForm.fileChooser.getSelectedFile().getName();
-        } else {
-            mainForm.imagePath = userFolder + imageSource + "default.jpg";
+        } catch (NullPointerException npe) {
+            mainForm.imagePath = userFolder +  imageSource + "default.jpg";
+            mainForm.imageName = "default.jpg";
         }
+        
         try {
             BufferedImage selectedImage = ImageIO.read(new File(mainForm.imagePath));
             lblImage.setIcon(resizImageIcon(selectedImage));
