@@ -28,13 +28,28 @@ Section "Required files" required_files
     File OpusList.jar
     SetOutPath "$INSTDIR\lib"
     File lib\gson-2.8.8.jar
+    CreateDirectory "$LOCALAPPDATA\OpusList\data"
+    CreateDirectory "$LOCALAPPDATA\OpusList\images"
+    WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
 
 Section "Initialize dummy data" dummy_data
-    CreateDirectory "$LOCALAPPDATA\OpusList\data"
     SetOutPath "$LOCALAPPDATA\OpusList\data"
     File obres.json
-    CreateDirectory "$LOCALAPPDATA\OpusList\images"
     SetOutPath "$LOCALAPPDATA\OpusList\images"
     File images\*.*
+SectionEnd
+
+Section "Start menu shortcuts"
+    CreateDirectory "$SMPROGRAMS\OpusList"
+    CreateShortcut "$SMPROGRAMS\OpusList\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+    CreateShortcut "$SMPROGRAMS\OpusList\OpusList.lnk" "$INSTDIR\OpusList.jar"
+SectionEnd
+
+Section "Uninstall"
+    Delete $INSTDIR\uninstall.exe
+    Delete $INSTDIR\lib\*
+    Delete $INSTDIR\OpusList.jar
+
+    RMDir "$INSTDIR"
 SectionEnd
