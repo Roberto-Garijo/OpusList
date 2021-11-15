@@ -5,7 +5,7 @@ Name "Opus List SPDVI"
 OutFile "setup_opusList_v1.exe"
 
 ; Request application privileges for Windows Vista
-RequestExecutionLevel user
+RequestExecutionLevel admin
 
 ; Build Unicode installer
 Unicode True
